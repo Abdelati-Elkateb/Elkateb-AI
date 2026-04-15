@@ -1,25 +1,31 @@
 <template>
-      <v-app>
-    <!-- Sidebar -->
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list>
-        <v-list-item title="Dashboard" prepend-icon="mdi-view-dashboard" />
-        <v-list-item title="Users" prepend-icon="mdi-account" />
-        <v-list-item title="Settings" prepend-icon="mdi-cog" />
-      </v-list>
-    </v-navigation-drawer>
+  <v-navigation-drawer width="280" permanent>
 
-    <!-- Top Bar -->
-    <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-toolbar-title>My App</v-toolbar-title>
-    </v-app-bar>
+    <v-btn block class="ma-2" color="primary">
+      + New Chat
+    </v-btn>
 
-    <!-- Content -->
-    <v-main>
-      <v-container>
-        <h1>Welcome 👋</h1>
-      </v-container>
-    </v-main>
-  </v-app>
+    <v-list nav>
+      <v-list-item
+        v-for="chat in chats"
+        :key="chat.id"
+        :to="`/chat/${chat.id}`"
+        active-class="bg-grey-lighten-3"
+      >
+        <v-list-item-title class="text-truncate">
+          {{ chat.title }}
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
+
+  </v-navigation-drawer>
 </template>
+
+<script setup>
+const chats = [
+  { id: 1, title: "Vue Router help" },
+  { id: 2, title: "Vuetify sidebar design" },
+  { id: 3, title: "Build ChatGPT clone" },
+  { id: 4, title: "JavaScript tips" },
+]
+</script>

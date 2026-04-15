@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
 
-// https://vite.dev/config/
+import path from 'path'
 export default defineConfig({
   plugins: [
     vue(),

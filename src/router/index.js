@@ -1,15 +1,27 @@
-import {createRouter, createWebHiostory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
+const routes = [
+      {
+        path: '/dashboard',
+        name: 'main',
+        component: () => import('@/layouts/MainLayout.vue'), // 👈 مهم
+        children: [
+            {
+                path: '',
+                component: () => import('@/views/live-chat/index.vue')
 
-const route = createRouter({
-    history: createWebHiostory(),
-    routes:[
-        {
-            path:'/',
-            name:'home',
-            component:()=>import('../views/Home.vue')
-        }
+            },
+          {
+            path: ':id',
+            component: () => import('@/views/ChatView/index.vue')
+          }
+        ]
+      }
     ]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 })
 
-export default route;
+export default router
