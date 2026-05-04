@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
       {
-        path: '/dashboard',
+        path: '/',
         name: 'main',
         component: () => import('@/layouts/MainLayout.vue'), // 👈 مهم
         children: [
