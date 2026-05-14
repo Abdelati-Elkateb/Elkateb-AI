@@ -1,7 +1,5 @@
 
-
-
-export interface Chat {
+export interface chatType {
   id: number;
   title: string;
 }

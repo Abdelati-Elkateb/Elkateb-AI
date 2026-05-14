@@ -45,7 +45,6 @@
           <router-link :to="`/chat/${chat.id}`"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] text-zinc-700 hover:bg-black/5 transition-colors whitespace-nowrap">
             <span v-show="!isCollapsed" class="truncate">{{ chat.title }}</span>
-            <span v-show="!isCollapsed" class="truncate">{{ chat.name }}</span>
           </router-link>
         </li>
       </ul>
@@ -84,13 +83,8 @@ import library from "@/assets/img/library.svg";
 import { chatType } from "@/types/chat";
 
 
+const isCollapsed = ref(false)
 
-const isCollapsed = ref<boolean>(false)
-
-
-let makeChange = ref<chatType[]>("wwwww")
-
-makeChange.value = 2000
 
 
 const toggleSidebar = () => {
@@ -98,13 +92,11 @@ const toggleSidebar = () => {
 }
 
 const chats = ref<chatType[]>([
-  { id: 1, title: 'Typo Assistance Request', name: "200000"},
-  { id: 2, title: 'Quadratic Function Plot', name: "kkkkkkkkkkkkkkkkkkkkkkkkk" },
-  { id: 3, title: 'Toyota Names Poetry', name: 200000 }
+  { id: 1, title: 'Typo Assistance Request' },
+  { id: 2, title: 'Quadratic Function Plot' },
+  { id: 3, title: 'Toyota Names Poetry' }
 ])
 
 
 
 </script>
-
-

@@ -1,76 +1,39 @@
 <template>
-  <Teleport>
-    <div
-      v-if="showModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-    >
-      <div
-        class="bg-white dark:bg-zinc-900 w-full max-w-sm p-8 rounded-3xl shadow-2xl flex flex-col items-center text-center"
-      >
-        <h3 class="text-zinc-500 dark:text-zinc-400 font-medium mb-8">
-          {{ isListening ? "جاري الاستماع..." : "انتهى الاستماع" }}
-        </h3>
+  <div class="bg-white flex flex-col border border-gray-100 w-[70%] shadow-lg py-4 rounded-4xl px-4 h-auto">
+    <!-- The Input Field -->
+    <input v-model="userInput" type="text" placeholder="ask anything" class="w-full focus:outline-none" />
 
-        <!-- شكل الموجة الصوتي (بسيط) -->
-        <div class="flex items-center justify-center space-x-1 h-12 mb-8">
-          <div
-            v-for="i in 5"
-            :key="i"
-            class="w-1 bg-black dark:bg-white rounded-full transition-all duration-150"
-            :style="{ height: isListening ? `${Math.random() * 100}%` : '20%' }"
-            :class="{ 'animate-bounce': isListening }"
-          ></div>
-        </div>
-
-        <!-- النص المكتوب حالياً -->
-        <p
-          class="text-lg font-semibold text-zinc-800 dark:text-zinc-100 mb-8 min-h-[1.5em]"
-        >
-          {{ result || "قل شيئاً..." }}
-        </p>
-
-        <!-- أزرار التحكم -->
-        <div class="flex space-x-4">
-          <button
-            @click="stopListening"
-            class="px-6 py-2 bg-zinc-200 dark:bg-zinc-800 rounded-full font-medium"
-          >
-            إلغاء
-          </button>
-          <button
-            @click="confirmText"
-            class="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium"
-          >
-            تم
-          </button>
+    <div class="flex gap-3 items-center mt-4">
+      <div class="ml-auto flex gap-2 items-center">
+        <!-- The Trigger Button (Microphone) -->
+        <div @click="startListening"
+          class="h-[50px] w-[50px] bg-[#333] rounded-full flex items-center justify-center cursor-pointer">
+          <img :src="recorder" alt="recorder" class="w-[20px] h-[20px]" />
         </div>
       </div>
     </div>
-  </Teleport>
+
+    <!-- The Modal Component -->
+
+    <VoicePrompt :show-modal="showModal" :is-listening="isListening" :result="result" @close="stopListening"
+      @confirm="handleConfirm" />
+  </div>
+
 </template>
 
 <script setup lang="ts">
-import ModelVoice from "@/components/composables/VoicePrompt/useVoicePrompt";
+import { ref } from 'vue';
+import recorder from "@/assets/img/Vector.svg";
+import VoicePrompt from "@/components/common/VoicePrompt.vue";
+import { useVoicePrompt } from "@/components/composables/VoicePrompt/useVoicePrompt";
 
-const {
-  showModal,
-  isListening,
-  result,
-  startListening,
-  stopListening,
-  confirmText,
-} = ModelVoice();
+const userInput = ref('');
+const { showModal, isListening, result, startListening, stopListening } = useVoicePrompt();
 
-interface props {
-    isListening: boolean;
-    showModal: boolean;
-    result: string;
-    stopListening: () => void;
-    confirmText: () => void;
-
-}
-
-const props = defineProps<Props>();
-
-
+const handleConfirm = () => {
+  if (result.value) {
+    userInput.value = result.value;
+  }
+  stopListening();
+};
 </script>

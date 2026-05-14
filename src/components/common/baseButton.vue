@@ -1,46 +1,52 @@
 <template>
   <div
-    class="bg-[#ffffff] flex flex-col border border-gray-100 w-[70%] shadow-lg py-4 overflow-hidden !rounded-4xl px-4 focus:outline-none focus:ring-2 focus:ring-gray-100 h-[auto]"
-  >
-    <input
-      type="text"
-      placeholder="ask anything"
-      class="w-full focus:outline-none"
-    />
-
-
-    <div class="flex-1"></div>
-
-
-    <div class="flex gap-3 items-center">
-      <div>
-        <label for="file-upload" class="py-2 rounded-lg cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            class="size-5"
-          >
+    class="bg-[#ffffff] flex flex-col border border-gray-100 w-[70%] shadow-lg py-4 overflow-hidden !rounded-4xl px-4 focus-within:ring-2 focus-within:ring-gray-100 h-auto">
+    <div v-if="imageUrl" class="mb-3 flex items-start">
+      <div class="relative group">
+        <img :src="imageUrl" alt="Preview" class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm" />
+        <!-- Remove Button -->
+        <button @click="removeImage"
+          class="absolute -top-2 -right-2 bg-black text-white rounded-full p-0.5 shadow-md hover:bg-gray-800 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
             <path
-              d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
-            />
+              d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
           </svg>
-        </label>
+        </button>
+      </div>
+    </div>
 
-        <input type="file" id="file-upload" class="hidden" />
+    <!-- 2. Text Input -->
+    <input type="text" placeholder="Ask anything" class="w-full focus:outline-none mb-4" />
+
+    <!-- 3. Bottom Action Bar -->
+    <div class="flex gap-3 items-center">
+      <div class="flex items-center gap-2">
+        <div class="relative group">
+          <label for="chatgpt-file-upload"
+            class="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer transition-all duration-200 text-gray-500 hover:bg-gray-200 active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+              stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </label>
+
+          <!-- Input accepts images -->
+          <input id="chatgpt-file-upload" type="file" class="hidden" ref="fileInput" accept="image/*"
+            @change="handleFileChange" />
+        </div>
+
+        <span v-if="selectedFileName && !imageUrl" class="text-xs text-gray-500 truncate max-w-[150px]">
+          {{ selectedFileName }}
+        </span>
       </div>
 
       <div class="ml-auto flex gap-2 items-center">
-        <VoicePrompt iconClass="w-10 h-10" />
+        <VoicePrompt ref="voicePromptRef" iconClass="w-10 h-10" />
+        <MicrophoneIcon class="w-10 h-10 text-gray-500" />
 
-        <div
-          class="h-[50px] w-[50px] bg-[#333] rounded-full flex items-center justify-center cursor-pointer"
-        >
-          <img
-            :src="recorder"
-            alt="recorder"
-            class="w-[20px] h-[20px] object-contain"
-          />
+        <div @click="openVoiceModal"
+          class="h-[40px] w-[40px] bg-[#333] rounded-full flex items-center justify-center cursor-pointer hover:bg-black transition-colors">
+          <img :src="recorder" alt="recorder" class="w-[18px] h-[18px]" />
         </div>
       </div>
     </div>
@@ -48,10 +54,41 @@
 </template>
 
 <script setup>
-import { MicrophoneIcon } from "@heroicons/vue/24/solid";
+import { ref } from 'vue';
 import recorder from "@/assets/img/Vector.svg";
 import VoicePrompt from "@/components/common/VoicePrompt.vue";
+import { MicrophoneIcon } from "@heroicons/vue/24/solid";
 
+const voicePromptRef = ref(null);
+const fileInput = ref(null);
+const selectedFileName = ref('');
+const imageUrl = ref(null);
 
+const openVoiceModal = () => {
+  if (voicePromptRef.value) {
+    voicePromptRef.value.startListening();
+  }
+};
 
-</script> 
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    selectedFileName.value = file.name;
+
+    // Check if the file is an image to show preview
+    if (file.type.startsWith('image/')) {
+      imageUrl.value = URL.createObjectURL(file);
+    } else {
+      imageUrl.value = null; // Reset if it's not an image (e.g. PDF)
+    }
+  }
+};
+
+const removeImage = () => {
+  imageUrl.value = null;
+  selectedFileName.value = '';
+  if (fileInput.value) {
+    fileInput.value.value = ''; // Clear the input so you can re-upload the same file
+  }
+};
+</script>
