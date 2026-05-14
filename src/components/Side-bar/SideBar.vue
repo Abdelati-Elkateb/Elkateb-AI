@@ -84,7 +84,9 @@ import library from "@/assets/img/library.svg";
 import { chatType } from "@/types/chat";
 
 
-const isCollapsed = ref(false)
+
+const isCollapsed = ref<boolean>(false)
+
 
 let makeChange = ref<chatType[]>("wwwww")
 
@@ -96,9 +98,13 @@ const toggleSidebar = () => {
 }
 
 const chats = ref<chatType[]>([
-  { id: 1, title: 'Typo Assistance Request', name: "200000" },
+  { id: 1, title: 'Typo Assistance Request', name: "200000"},
   { id: 2, title: 'Quadratic Function Plot', name: "kkkkkkkkkkkkkkkkkkkkkkkkk" },
   { id: 3, title: 'Toyota Names Poetry', name: 200000 }
 ])
 
+
+
 </script>
+
+

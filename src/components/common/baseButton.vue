@@ -8,10 +8,10 @@
       class="w-full focus:outline-none"
     />
 
-    <!-- SPACE PUSHER (this is the trick) -->
+
     <div class="flex-1"></div>
 
-    <!-- BOTTOM BAR -->
+
     <div class="flex gap-3 items-center">
       <div>
         <label for="file-upload" class="py-2 rounded-lg cursor-pointer">
@@ -31,11 +31,7 @@
       </div>
 
       <div class="ml-auto flex gap-2 items-center">
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded-full text-gray-900 hover:bg-gray-100 transition"
-        >
-          <MicrophoneIcon class="w-5 h-5" />
-        </button>
+        <VoicePrompt iconClass="w-10 h-10" />
 
         <div
           class="h-[50px] w-[50px] bg-[#333] rounded-full flex items-center justify-center cursor-pointer"
@@ -54,4 +50,8 @@
 <script setup>
 import { MicrophoneIcon } from "@heroicons/vue/24/solid";
 import recorder from "@/assets/img/Vector.svg";
-</script>
+import VoicePrompt from "@/components/common/VoicePrompt.vue";
+
+
+
+</script> 
