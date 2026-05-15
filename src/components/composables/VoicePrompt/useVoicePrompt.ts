@@ -14,7 +14,6 @@ export const useVoicePrompt = () => {
     showModal.value = true;
     result.value = '';
     start();
-    alert("jjjj")
   };
 
   const stopListening = () => {

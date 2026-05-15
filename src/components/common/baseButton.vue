@@ -79,7 +79,7 @@ const handleFileChange = (event) => {
     if (file.type.startsWith('image/')) {
       imageUrl.value = URL.createObjectURL(file);
     } else {
-      imageUrl.value = null; // Reset if it's not an image (e.g. PDF)
+      imageUrl.value = null;
     }
   }
 };
@@ -88,7 +88,7 @@ const removeImage = () => {
   imageUrl.value = null;
   selectedFileName.value = '';
   if (fileInput.value) {
-    fileInput.value.value = ''; // Clear the input so you can re-upload the same file
+    fileInput.value.value = '';
   }
 };
 </script>

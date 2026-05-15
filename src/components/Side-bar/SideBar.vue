@@ -22,7 +22,7 @@
       <button
         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-black/5 text-[14px] text-zinc-800 transition-colors whitespace-nowrap">
         <img :src="newChatIcon" alt="new" class="w-4 h-4 opacity-70 shrink-0" />
-        <span v-show="!isCollapsed" class="font-medium">New chat</span>
+        <span v-show="!isCollapsed" @click="createNewChat" class="font-medium">New chat</span>
       </button>
 
       <div
@@ -79,7 +79,6 @@ import { ref } from 'vue'
 import newChatIcon from "@/assets/img/new-chat.svg";
 import chatGPTIcon from "@/assets/img/chat-GPT.svg";
 import search from "@/assets/img/search.svg";
-import library from "@/assets/img/library.svg";
 import { chatType } from "@/types/chat";
 
 
@@ -96,6 +95,12 @@ const chats = ref<chatType[]>([
   { id: 2, title: 'Quadratic Function Plot' },
   { id: 3, title: 'Toyota Names Poetry' }
 ])
+
+
+
+const createNewChat = () => {
+  chats.value.unshift({ id: chats.value.length + 1, title: 'New chat' })
+}
 
 
 

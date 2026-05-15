@@ -1,22 +1,31 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean
+  }
+}
+
+
+
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/dashboard',
+    path: '/',
     name: 'main',
     component: () => import('@/layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('@/views/live-chat/index.vue'),
+        component: () => import('@/views/live-chat/index.vue')
 
       },
       {
         path: ':id',
-        component: () => import('@/views/ChatView/index.vue'),
-      },
-    ],
-  },
+        component: () => import('@/views/ChatView/index.vue')
+      }
+    ]
+  }
 ]
 
 const router = createRouter({
