@@ -29,7 +29,7 @@
         class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-black/5 text-[14px] text-zinc-800 cursor-pointer group whitespace-nowrap">
         <div class="flex items-center gap-3">
           <img :src="search" alt="search" class="w-4 h-4 opacity-70 shrink-0" />
-          <span v-show="!isCollapsed">Search chats</span>
+          <input type="search" class="" v-show="!isCollapsed" placeholder="Search chats" />
         </div>
         <span v-show="!isCollapsed" class="text-[10px] text-zinc-400 group-hover:text-zinc-500 font-mono">⌘K</span>
       </div>
@@ -75,33 +75,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import newChatIcon from "@/assets/img/new-chat.svg";
-import chatGPTIcon from "@/assets/img/chat-GPT.svg";
-import search from "@/assets/img/search.svg";
-import { chatType } from "@/types/chat";
+import newChatIcon from '@/assets/img/new-chat.svg'
+import chatGPTIcon from '@/assets/img/chat-GPT.svg'
+import search from '@/assets/img/search.svg'
+import { useSidebar } from '@/composables/useSidebar'
 
-
-const isCollapsed = ref(false)
-
-
-
-const toggleSidebar = () => {
-  isCollapsed.value = !isCollapsed.value
-}
-
-const chats = ref<chatType[]>([
-  { id: 1, title: 'Typo Assistance Request' },
-  { id: 2, title: 'Quadratic Function Plot' },
-  { id: 3, title: 'Toyota Names Poetry' }
-])
-
-
-
-const createNewChat = () => {
-  chats.value.unshift({ id: chats.value.length + 1, title: 'New chat' })
-}
-
-
-
+const { isCollapsed, toggleSidebar, chats, createNewChat } = useSidebar()
 </script>

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import Sidebar from '@/components/Side-bar/SideBar.vue'
+import Sidebar from '@/components/sidebar/SideBar.vue'
 </script>
 
 <style scoped>

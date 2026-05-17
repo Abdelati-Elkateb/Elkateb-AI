@@ -1,10 +1,11 @@
 <template>
   <div
     class="bg-[#ffffff] flex flex-col border border-gray-100 w-[70%] shadow-lg py-4 overflow-hidden !rounded-4xl px-4 focus-within:ring-2 focus-within:ring-gray-100 h-auto">
+
+    <!-- Image Preview -->
     <div v-if="imageUrl" class="mb-3 flex items-start">
       <div class="relative group">
         <img :src="imageUrl" alt="Preview" class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm" />
-        <!-- Remove Button -->
         <button @click="removeImage"
           class="absolute -top-2 -right-2 bg-black text-white rounded-full p-0.5 shadow-md hover:bg-gray-800 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
@@ -15,10 +16,10 @@
       </div>
     </div>
 
-    <!-- 2. Text Input -->
+    <!-- Text Input -->
     <input type="text" placeholder="Ask anything" class="w-full focus:outline-none mb-4" />
 
-    <!-- 3. Bottom Action Bar -->
+    <!-- Bottom Action Bar -->
     <div class="flex gap-3 items-center">
       <div class="flex items-center gap-2">
         <div class="relative group">
@@ -29,8 +30,6 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           </label>
-
-          <!-- Input accepts images -->
           <input id="chatgpt-file-upload" type="file" class="hidden" ref="fileInput" accept="image/*"
             @change="handleFileChange" />
         </div>
@@ -41,8 +40,7 @@
       </div>
 
       <div class="ml-auto flex gap-2 items-center">
-        <VoicePrompt ref="voicePromptRef" iconClass="w-10 h-10" />
-        <MicrophoneIcon class="w-10 h-10 text-gray-500" />
+        <VoicePrompt ref="voicePromptRef" />
 
         <div @click="openVoiceModal"
           class="h-[40px] w-[40px] bg-[#333] rounded-full flex items-center justify-center cursor-pointer hover:bg-black transition-colors">
@@ -53,42 +51,33 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import recorder from "@/assets/img/Vector.svg";
-import VoicePrompt from "@/components/common/VoicePrompt.vue";
-import { MicrophoneIcon } from "@heroicons/vue/24/solid";
+<script setup lang="ts">
+import { ref } from 'vue'
+import recorder from '@/assets/img/Vector.svg'
+import VoicePrompt from '@/components/common/VoicePrompt.vue'
 
-const voicePromptRef = ref(null);
-const fileInput = ref(null);
-const selectedFileName = ref('');
-const imageUrl = ref(null);
+const voicePromptRef = ref<InstanceType<typeof VoicePrompt> | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+const selectedFileName = ref('')
+const imageUrl = ref<string | null>(null)
 
 const openVoiceModal = () => {
-  if (voicePromptRef.value) {
-    voicePromptRef.value.startListening();
-  }
-};
+  voicePromptRef.value?.startListening()
+}
 
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
+const handleFileChange = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
   if (file) {
-    selectedFileName.value = file.name;
-
-    // Check if the file is an image to show preview
-    if (file.type.startsWith('image/')) {
-      imageUrl.value = URL.createObjectURL(file);
-    } else {
-      imageUrl.value = null;
-    }
+    selectedFileName.value = file.name
+    imageUrl.value = file.type.startsWith('image/') ? URL.createObjectURL(file) : null
   }
-};
+}
 
 const removeImage = () => {
-  imageUrl.value = null;
-  selectedFileName.value = '';
+  imageUrl.value = null
+  selectedFileName.value = ''
   if (fileInput.value) {
-    fileInput.value.value = '';
+    fileInput.value.value = ''
   }
-};
+}
 </script>
