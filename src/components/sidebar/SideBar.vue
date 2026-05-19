@@ -22,7 +22,7 @@
       <button
         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-black/5 text-[14px] text-zinc-800 transition-colors whitespace-nowrap">
         <img :src="newChatIcon" alt="new" class="w-4 h-4 opacity-70 shrink-0" />
-        <span v-show="!isCollapsed" @click="createNewChat" class="font-medium">New chat</span>
+        <span v-show="!isCollapsed" @click="startNewChat" class="font-medium">New chat</span>
       </button>
 
       <div
@@ -80,5 +80,22 @@ import chatGPTIcon from '@/assets/img/chat-GPT.svg'
 import search from '@/assets/img/search.svg'
 import { useSidebar } from '@/composables/useSidebar'
 
-const { isCollapsed, toggleSidebar, chats, createNewChat } = useSidebar()
+import { ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
+
+const { isCollapsed, toggleSidebar, chats } = useSidebar()
+
+
+const startNewChat = () => {
+  toggleSidebar()
+  router.push('/');
+};
+
+
+// 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
+
+
+
 </script>
