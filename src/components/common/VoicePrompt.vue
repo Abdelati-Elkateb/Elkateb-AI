@@ -42,9 +42,4 @@ defineExpose({ startListening })
       </div>
     </div>
   </Teleport>
-
-
-
-  <!-- // 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
- -->
 </template>
