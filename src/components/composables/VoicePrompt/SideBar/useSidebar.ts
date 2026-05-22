@@ -31,7 +31,4 @@ export const useSidebar = () => {
         chats,
         createNewChat
     }
-
-
-
 }
