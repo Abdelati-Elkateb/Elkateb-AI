@@ -10,8 +10,24 @@
         <!-- 2. ChatGPT Chat Content Area -->
         <div v-if="isChatStarted" class="flex-1 w-full overflow-y-auto mb-4 px-2 scrollbar-none animate-fade-in">
             <div class="flex flex-col space-y-4 max-w-3xl mx-auto w-full py-4">
-
-
+                
+                <!-- Messages from Store -->
+                <div v-for="(message, index) in chatStore.chats" :key="index" 
+                    class="flex animate-fade-in"
+                    :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
+                    
+                    <!-- User Message (Right side) -->
+                    <div v-if="message.role === 'user'"
+                        class="max-w-xs px-4 py-2 rounded-lg bg-blue-600 text-white rounded-br-none">
+                        {{ message.content }}
+                    </div>
+                    
+                    <!-- AI Message (Left side) -->
+                    <div v-else
+                        class="max-w-xs px-4 py-2 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 rounded-bl-none">
+                        {{ message.content }}
+                    </div>
+                </div>
 
                 <!-- 🧠 Beautiful Minimalist Thinking Indicator -->
                 <div v-if="isThinking" class="flex flex-col space-y-1.5 pt-4 animate-fade-in">
@@ -27,7 +43,8 @@
 
                     <!-- Three smooth bouncing typing dots -->
                     <div class="flex items-center space-x-1 pl-6 h-6">
-                        <div class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot"></div>
+                        <div class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot">
+                        </div>
                         <div
                             class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot [animation-delay:0.2s]">
                         </div>
@@ -49,6 +66,10 @@
 <script setup>
 import BaseButton from '@/components/common/baseButton.vue'
 import { ref } from 'vue'
+import { useChat } from "@/stores/usechatStore";
+
+const chatStore = useChat();
+
 
 const isChatStarted = ref(false)
 const isThinking = ref(false)

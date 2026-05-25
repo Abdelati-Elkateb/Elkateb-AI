@@ -4,13 +4,12 @@
     class="bg-[#ffffff] flex flex-col border border-gray-100 w-[70%] shadow-lg py-4 overflow-hidden !rounded-4xl px-4 focus-within:ring-2 focus-within:ring-gray-100 h-auto"
   >
     <div v-if="imageUrl" class="mb-3 flex items-start">
-      <div class="relative group">
+      <div class="relative">
         <img
           :src="imageUrl"
           alt="Preview"
           class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm"
         />
-
         <button
           type="button"
           @click="removeImage"
@@ -96,10 +95,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import recorder from "@/assets/img/Vector.svg";
 import VoicePrompt from "@/components/common/VoicePrompt.vue";
-import { OpenRouter } from "@openrouter/sdk";
+import { useChat } from "@/stores/usechatStore";
+
+const chatStore = useChat();
+
 
 const voicePromptRef = ref<InstanceType<typeof VoicePrompt> | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -108,9 +110,15 @@ const imageUrl = ref<string | null>(null);
 
 const userInput = ref("");
 const isLoading = ref(false);
-let isChatStarted = ref(false);
+const isChatStarted = ref(false);
 const replyMas = ref([]);
 
+
+
+onMounted(() => {
+chatStore.addChat()
+
+});
 const openVoiceModal = () => {
   voicePromptRef.value?.startListening();
 };
@@ -131,58 +139,20 @@ const removeImage = () => {
   }
 };
 
-const client = new OpenRouter({
-  apiKey: import.meta.env.VITE_OPENROUTER_API_KEY,
-  defaultHeaders: {
-    "HTTP-Referer": window.location.origin,
-    "X-OpenRouter-Title": "Elkateb-AI",
-  },
-});
 
 const messages = ref<{ role: "user" | "assistant"; content: string }[]>([]);
 
 const sendMessage = async () => {
   const promptText = userInput.value.trim();
+  const myImageUrl = imageUrl.value;
   if (!promptText || isLoading.value) return;
   isChatStarted.value = true;
   emit("isChatStarted", isChatStarted.value);
+  chatStore.addChat(promptText);
+  userInput.value = "";
+  removeImage();
+}
 
-  try {
-    isLoading.value = true;
-    userInput.value = "";
-
-    const completion = await client.chat.send({
-      chatRequest: {
-        model: "baidu/cobuddy:free",
-        messages: [
-          {
-            role: "user",
-            content: promptText,
-          },
-        ],
-      },
-    });
-
-    console.log("Response Object:", completion);
-
-    const aiReply =
-      completion?.message?.content || completion?.choices?.[0]?.message?.content;
-
-    if (aiReply) {
-  console.log("AI Reply:", aiReply);
-      replyMas.value.push(aiReply);
-    
-
-      console.log('this is the replyMas array:', replyMas.value);
-    } else {
-      console.log("لم يتم العثور على نص الرد، تفحص كائن Response Object في الـ Console");
-    }
-  } catch (error) {
-    console.error("حدث خطأ أثناء إرسال الرسالة:", error);
-  } finally {
-    isLoading.value = false;
-  }
-};
 
 const props = defineProps({
   isChatStarted: {
