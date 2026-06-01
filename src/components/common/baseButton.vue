@@ -98,9 +98,11 @@
 import { ref, onMounted } from "vue";
 import recorder from "@/assets/img/Vector.svg";
 import VoicePrompt from "@/components/common/VoicePrompt.vue";
-import { useChat } from "@/stores/usechatStore";
+import { useChatStore } from "@/stores/useChatStore";
+import { useRouter } from "vue-router";
 
-const chatStore = useChat();
+const chatStore = useChatStore();
+const router = useRouter();
 
 
 const voicePromptRef = ref<InstanceType<typeof VoicePrompt> | null>(null);
@@ -115,10 +117,6 @@ const replyMas = ref([]);
 
 
 
-onMounted(() => {
-chatStore.addChat()
-
-});
 const openVoiceModal = () => {
   voicePromptRef.value?.startListening();
 };
@@ -148,9 +146,17 @@ const sendMessage = async () => {
   if (!promptText || isLoading.value) return;
   isChatStarted.value = true;
   emit("isChatStarted", isChatStarted.value);
-  chatStore.addChat(promptText);
+  
   userInput.value = "";
   removeImage();
+  
+  // إرسال الرسالة والانتظار للحصول على ID المحادثة
+  const convId = await chatStore.addChat(promptText);
+  
+  // التوجيه لرابط المحادثة بعد الحصول على الرد
+  if (convId) {
+    router.push('/' + convId);
+  }
 }
 
 

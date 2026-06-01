@@ -1,5 +1,126 @@
 <template>
+    <div class="flex flex-col h-screen p-4 items-center transition-all duration-500 ease-in-out bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 justify-between pb-6">
 
-    this is chat
-    
+        <div class="flex-1 w-full overflow-y-auto mb-4 px-2 scrollbar-none animate-fade-in">
+            <div class="flex flex-col space-y-4 max-w-3xl mx-auto w-full py-4">
+                
+                <div v-for="(message, index) in chatStore.chats" :key="index" 
+                    class="flex animate-fade-in justify-end">
+                    
+                    <div v-if="message.role === 'user'"
+                        class="max-w-xs p-5 rounded-3xl bg-[#F9F9F9] text-[#333] rounded-br-none">
+                        {{ message.content }}
+                    </div>
+           
+                    <div v-else
+                        class="px-4 py-2 text-[#333]">
+                        {{ message.content }}
+                    </div>
+                </div>
+
+                <div v-if="chatStore.isThinking" class="flex flex-col space-y-1.5 pt-4 animate-fade-in">
+                    <div class="flex items-center space-x-2 text-zinc-400 dark:text-zinc-500">
+                        <svg class="w-4 h-4 animate-spin-slow" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.813 15.904 9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.25 5.25 17.5 8.5l-.75-3.25L13.5 4.5l3.25-.75.75-3.25.75 3.25 3.25.75-3.25.75Z" />
+                        </svg>
+                        <span class="text-xs font-medium tracking-wide">Elkateb AI is thinking...</span>
+                    </div>
+
+                    <div class="flex items-center space-x-1 pl-6 h-6">
+                        <div class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot">
+                        </div>
+                        <div class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot [animation-delay:0.2s]">
+                        </div>
+                        <div class="w-2 h-2 bg-zinc-400 dark:bg-zinc-600 rounded-full animate-bounce-dot [animation-delay:0.4s]">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <BaseButton />
+
+    </div>
 </template>
+
+<script setup lang="ts">
+import BaseButton from '@/components/common/baseButton.vue'
+import { onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useChatStore } from "@/stores/useChatStore";
+
+const route = useRoute();
+const chatStore = useChatStore();
+
+// عند تحميل الصفحة — جلب المحادثة بناءً على الـ ID من الرابط
+onMounted(() => {
+    const id = route.params.id as string;
+    if (id) {
+        chatStore.selectConversation(id);
+    }
+});
+
+// مراقبة تغيير الـ ID في الرابط (مثلاً عند الضغط على محادثة أخرى من السايدبار)
+watch(() => route.params.id, (newId) => {
+    if (newId) {
+        chatStore.selectConversation(newId as string);
+    }
+});
+</script>
+
+<style scoped>
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceDot {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-bounce-dot {
+    animation: bounceDot 1.4s infinite ease-in-out;
+}
+
+.animate-spin-slow {
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>
