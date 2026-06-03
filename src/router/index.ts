@@ -1,13 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router' // 👈 Switched to createWebHashHistory
 
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
   }
 }
-
-
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,7 +15,6 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '',
         component: () => import('@/views/live-chat/index.vue')
-
       },
       {
         path: ':id',
@@ -30,7 +26,8 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // 👈 Use hash history and pass the base path from Vite env
+  history: createWebHashHistory(import.meta.env.BASE_URL), 
   routes,
 })
 

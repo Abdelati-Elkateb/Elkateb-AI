@@ -10,19 +10,22 @@ export default defineConfig({
     tailwindcss(),
     vuetify({ autoImport: true }),
   ],
-  base: '/Elkateb-AI/',
+  // Explicitly set base path for GitHub Pages subfolder
+  base: './', 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    // Keeps file naming structured cleanly for static servers
     rollupOptions: {
       output: {
-        // Generates completely unique filenames using timestamps to force-clear browser and GitHub cache
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]'
       }
     }
   }
