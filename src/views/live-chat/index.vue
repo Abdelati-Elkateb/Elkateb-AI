@@ -69,8 +69,7 @@ const isChatStarted = ref(false)
 
 const simulateSearch = () => {
     isChatStarted.value = true
-    
-    // Explicitly show the thinking animation inside it
+
     chatStore.isThinking = true;
 }
 </script>

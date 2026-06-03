@@ -87,7 +87,6 @@
           <img :src="recorder" alt="recorder" class="w-[18px] h-[18px]" />
         </div>
 
-        <!-- زر إرسال حقيقي داخل الفورم لتشغيل الـ Enter والضغط بالماوس -->
         <button type="submit" :disabled="isLoading" class="hidden"></button>
       </div>
     </div>
@@ -150,10 +149,8 @@ const sendMessage = async () => {
   userInput.value = "";
   removeImage();
   
-  // إرسال الرسالة والانتظار للحصول على ID المحادثة
   const convId = await chatStore.addChat(promptText);
   
-  // التوجيه لرابط المحادثة بعد الحصول على الرد
   if (convId) {
     router.push('/' + convId);
   }

@@ -14,6 +14,8 @@ import route from '@/Plugins/route'
 
 const app = createApp(App)
 
+console.log('Vite: starting app...')
+
 // 4. Initialize Pinia and use it
 const pinia = createPinia()
 app.use(pinia)
@@ -23,3 +25,5 @@ app.use(route)
 app.use(vuetify) // You can keep this for now
 
 app.mount('#app')
+
+console.log('Vite: app mounted')

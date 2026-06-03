@@ -55,7 +55,6 @@ import { useChatStore } from "@/stores/useChatStore";
 const route = useRoute();
 const chatStore = useChatStore();
 
-// عند تحميل الصفحة — جلب المحادثة بناءً على الـ ID من الرابط
 onMounted(() => {
     const id = route.params.id as string;
     if (id) {
@@ -63,7 +62,6 @@ onMounted(() => {
     }
 });
 
-// مراقبة تغيير الـ ID في الرابط (مثلاً عند الضغط على محادثة أخرى من السايدبار)
 watch(() => route.params.id, (newId) => {
     if (newId) {
         chatStore.selectConversation(newId as string);
