@@ -1,17 +1,11 @@
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
-import vue from '@vitejs/plugin-vue'
-import vuetify from 'vite-plugin-vuetify'
-import path from 'path'
-
 export default defineConfig({
+  // ✅ Replace 'elkateb--ai' with your exact GitHub repo name
+base: '/Elkateb-AI/',  // ✅ exact repo name, case-sensitive
   plugins: [
     vue(),
     tailwindcss(),
     vuetify({ autoImport: true }),
   ],
-  // Explicitly set base path for GitHub Pages subfolder
-  base: './', 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -20,7 +14,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // Keeps file naming structured cleanly for static servers
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].js',
