@@ -253,4 +253,8 @@ export const useChatStore = defineStore('chat', {
       console.log("🗑️ تم حذف المحادثة:", conversationId);
     }
   }
+
+
+
+  
 });
