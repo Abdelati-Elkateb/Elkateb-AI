@@ -102,6 +102,8 @@ export const useChatStore = defineStore('chat', {
         },
       });
 
+      
+
       try {
         const cleanMessages = toRaw(this.chats).map(msg => ({
           role: msg.role,
@@ -256,5 +258,5 @@ export const useChatStore = defineStore('chat', {
 
 
 
-  
+
 });
