@@ -1,31 +1,31 @@
 <template>
-    <div class="flex flex-col h-screen p-4 items-center transition-all duration-500 ease-in-out bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 justify-between pb-6">
+    <div class="flex flex-col h-screen p-2 md:p-4 items-center transition-all duration-500 ease-in-out bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 justify-between pb-6">
 
-        <div class="flex-1 w-full overflow-y-auto mb-4 px-2 scrollbar-none animate-fade-in">
-            <div class="flex flex-col space-y-4 max-w-3xl mx-auto w-full py-4">
+        <div class="flex-1 w-full overflow-y-auto mb-4 px-1 md:px-2 scrollbar-none animate-fade-in">
+            <div class="flex flex-col space-y-2 md:space-y-4 max-w-sm md:max-w-3xl mx-auto w-full py-4">
                 
                 <div v-for="(message, index) in chatStore.chats" :key="index" 
                     class="flex animate-fade-in justify-end">
                     
                     <div v-if="message.role === 'user'"
-                        class="max-w-xs p-5 rounded-3xl bg-[#F9F9F9] text-[#333] rounded-br-none">
+                        class="max-w-xs md:max-w-md lg:max-w-lg p-3 md:p-5 rounded-2xl md:rounded-3xl bg-[#F9F9F9] text-[#333] rounded-br-none text-sm md:text-base">
                         {{ message.content }}
                     </div>
            
                     <div v-else
-                        class="px-4 py-2 text-[#333]">
+                        class="px-2 md:px-4 py-2 text-[#333] text-sm md:text-base">
                         {{ message.content }}
                     </div>
                 </div>
 
                 <div v-if="chatStore.isThinking" class="flex flex-col space-y-1.5 pt-4 animate-fade-in">
                     <div class="flex items-center space-x-2 text-zinc-400 dark:text-zinc-500">
-                        <svg class="w-4 h-4 animate-spin-slow" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <svg class="w-3 md:w-4 h-3 md:h-4 animate-spin-slow" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M9.813 15.904 9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.25 5.25 17.5 8.5l-.75-3.25L13.5 4.5l3.25-.75.75-3.25.75 3.25 3.25.75-3.25.75Z" />
                         </svg>
-                        <span class="text-xs font-medium tracking-wide">Elkateb AI is thinking...</span>
+                        <span class="text-xs md:text-sm font-medium tracking-wide">Elkateb AI is thinking...</span>
                     </div>
 
                     <div class="flex items-center space-x-1 pl-6 h-6">
