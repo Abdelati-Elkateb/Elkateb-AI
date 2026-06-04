@@ -1,6 +1,11 @@
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
+import path from 'path'
+
 export default defineConfig({
-  // ✅ Replace 'elkateb--ai' with your exact GitHub repo name
-base: '/Elkateb-AI/',  // ✅ exact repo name, case-sensitive
+  base: '/Elkateb-AI/',
   plugins: [
     vue(),
     tailwindcss(),
