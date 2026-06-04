@@ -66,7 +66,6 @@
             </span>
           </router-link>
 
-          <!-- Delete button - only visible when sidebar is expanded -->
           <button 
             v-if="!isCollapsed"
             @click.stop.prevent="handleDelete(chat.id)"
@@ -76,7 +75,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" 
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 6h18" />
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+              <path d="M19 6v14c0 1-1 2-2 2 / H7c-1 0-2-1-2-2V6" />
               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
             </svg>
           </button>
@@ -99,11 +98,23 @@
     </div>
   </aside>
 
-  <!-- Mobile sidebar toggle button -->
+  <button 
+    v-if="isCollapsed" 
+    @click="toggleSidebar" 
+    class="hidden md:block fixed top-4 left-[76px] z-50 p-2 text-zinc-500 hover:text-zinc-800 hover:bg-black/5 rounded-lg bg-white border border-black/5 shadow-md transition-all"
+    title="Expand sidebar"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M9 3v18" />
+    </svg>
+  </button>
+
   <button 
     v-if="!isSidebarOpen" 
     @click="isSidebarOpen = true" 
-    class="fixed top-4 left-4 z-50 md:hidden p-2 hover:bg-black/5 rounded-lg bg-white shadow-md"
+    class="fixed top-4 left-4 z-50 md:hidden p-2 hover:bg-black/5 rounded-lg bg-white shadow-md text-zinc-800"
   >
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +123,6 @@
     </svg>
   </button>
 
-  <!-- Overlay for mobile when sidebar is open -->
   <div
     v-if="isSidebarOpen"
     @click="isSidebarOpen = false"

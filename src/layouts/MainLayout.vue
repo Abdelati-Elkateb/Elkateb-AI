@@ -1,13 +1,19 @@
 <template>
   <v-app>
-    <div class="layout flex">
+    <!-- Modern Vuetify apps use v-layout to naturally handle sidebars and content zones -->
+    <v-layout class="w-full h-screen overflow-hidden">
+      
+      <!-- Your custom sidebar -->
       <Sidebar />
 
-      <v-main class="content flex-1 w-full md:w-auto overflow-hidden">
-        <router-view />
+      <!-- v-main automatically calculates padding based on the sidebar's size -->
+      <v-main class="content-wrapper">
+        <div class="router-container">
+          <router-view />
+        </div>
       </v-main>
-    </div>
 
+    </v-layout>
   </v-app>
 </template>
 
@@ -16,25 +22,26 @@ import Sidebar from '@/components/common/sidebar/SideBar.vue'
 </script>
 
 <style scoped>
-.layout {
-  display: flex;
-  width: 100%;
+/* Ensures the v-main element takes up 100% height and doesn't create unwanted double-scrollbars */
+.content-wrapper {
   height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.content {
+/* Acts as a rigorous container for your inner router views (like the chat interface) */
+.router-container {
   flex: 1;
-  display: flex;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
 @media (max-width: 768px) {
-  .layout {
-    position: relative;
-    flex-direction: row;
-  }
-  
-  .content {
+  /* Handle mobile structural overrides if your Sidebar doesn't natively use v-navigation-drawer */
+  .content-wrapper {
     width: 100%;
   }
 }

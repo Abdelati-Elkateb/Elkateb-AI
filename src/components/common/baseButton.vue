@@ -3,6 +3,32 @@
     @submit.prevent="sendMessage"
     class="bg-[#ffffff] flex flex-col border border-gray-100 w-full md:w-[70%] shadow-lg py-2 md:py-4 overflow-hidden !rounded-3xl md:!rounded-4xl px-2 md:px-4 focus-within:ring-2 focus-within:ring-gray-100 h-auto"
   >
+    <div v-if="imageUrl" class="mb-2 md:mb-3 flex items-start">
+      <div class="relative">
+        <img
+          :src="imageUrl"
+          alt="Preview"
+          class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-lg md:rounded-xl border border-gray-200 shadow-sm"
+        />
+        <button
+          type="button"
+          @click="removeImage"
+          class="absolute -top-2 -right-2 bg-black text-white rounded-full p-0.5 shadow-md hover:bg-gray-800 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-4 h-4"
+          >
+            <path
+              d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <input
       v-model="userInput"
       type="text"
@@ -11,7 +37,46 @@
       :disabled="isLoading"
     />
 
-    <div class="flex gap-1 md:gap-3 items-center bg flex-wrap md:flex-nowrap justify-end">
+    <div class="flex gap-1 md:gap-3 items-center bg flex-wrap md:flex-nowrap">
+      <div class="flex items-center gap-1 md:gap-2">
+        <div class="relative group">
+          <label
+            for="chatgpt-file-upload"
+            class="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full cursor-pointer transition-all duration-200 text-gray-500 hover:bg-gray-200 active:scale-95"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              class="w-4 md:w-5 h-4 md:h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </label>
+          <input
+            id="chatgpt-file-upload"
+            type="file"
+            class="hidden"
+            ref="fileInput"
+            accept="image/*"
+            @change="handleFileChange"
+          />
+        </div>
+
+        <span
+          v-if="selectedFileName && !imageUrl"
+          class="text-xs md:text-sm text-gray-500 truncate max-w-[100px] md:max-w-[150px]"
+        >
+          {{ selectedFileName }}
+        </span>
+      </div>
+
       <div class="ml-auto flex gap-1 md:gap-2 items-center">
         <VoicePrompt ref="voicePromptRef" />
 
@@ -40,6 +105,9 @@ const router = useRouter();
 
 
 const voicePromptRef = ref<InstanceType<typeof VoicePrompt> | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
+const selectedFileName = ref("");
+const imageUrl = ref<string | null>(null);
 
 const userInput = ref("");
 const isLoading = ref(false);
@@ -52,15 +120,34 @@ const openVoiceModal = () => {
   voicePromptRef.value?.startListening();
 };
 
+const handleFileChange = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) {
+    selectedFileName.value = file.name;
+    imageUrl.value = file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
+  }
+};
+
+const removeImage = () => {
+  imageUrl.value = null;
+  selectedFileName.value = "";
+  if (fileInput.value) {
+    fileInput.value.value = "";
+  }
+};
+
+
 const messages = ref<{ role: "user" | "assistant"; content: string }[]>([]);
 
 const sendMessage = async () => {
   const promptText = userInput.value.trim();
+  const myImageUrl = imageUrl.value;
   if (!promptText || isLoading.value) return;
   isChatStarted.value = true;
   emit("isChatStarted", isChatStarted.value);
   
   userInput.value = "";
+  removeImage();
   
   const convId = await chatStore.addChat(promptText);
   

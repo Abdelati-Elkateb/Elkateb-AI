@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-screen p-4 items-center transition-all duration-500 ease-in-out bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50"
+    <div class="flex flex-col mx-auto w-full h-screen p-4 items-center transition-all duration-500 ease-in-out bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50"
         :class="isChatStarted ? 'justify-between pb-6' : 'justify-center'">
 
         <div v-if="!isChatStarted" class="text-center mb-6 animate-fade-in">
