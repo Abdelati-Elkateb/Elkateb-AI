@@ -19,7 +19,7 @@ interface ConversationsMap {
 
 function migrateOldData(): ConversationsMap {
   const conversations: ConversationsMap = JSON.parse(localStorage.getItem('my_conversations') || '{}');
-  
+
   if (Object.keys(conversations).length > 0) {
     return conversations;
   }
@@ -38,7 +38,7 @@ function migrateOldData(): ConversationsMap {
 
     for (let i = 0; i < oldChats.length; i++) {
       const msg = oldChats[i];
-      
+
       if (msg.role === 'user' && i + 1 < oldChats.length && oldChats[i + 1].id === sidebarItem.id) {
         matchingMessages.push(msg);
         matchingMessages.push(oldChats[i + 1]);
@@ -62,13 +62,13 @@ function migrateOldData(): ConversationsMap {
 export const useChatStore = defineStore('chat', {
   state: () => ({
     chats: [] as ChatMessage[],
-    
+
     sidebarChats: JSON.parse(localStorage.getItem('my_sidebar_chats') || '[]') as SidebarItem[],
-    
+
     conversations: migrateOldData() as ConversationsMap,
-    
+
     activeConversationId: null as string | null,
-    
+
     isThinking: false
   }),
 
@@ -91,7 +91,7 @@ export const useChatStore = defineStore('chat', {
         content: cleanText,
         id: 'temp-' + Date.now().toString()
       });
-      
+
       this.isThinking = true;
 
       const client = new OpenRouter({
@@ -102,10 +102,10 @@ export const useChatStore = defineStore('chat', {
         },
       });
 
-      
 
 
-      
+
+
 
       try {
         const cleanMessages = toRaw(this.chats).map(msg => ({
@@ -115,8 +115,8 @@ export const useChatStore = defineStore('chat', {
 
         const completion = await client.chat.send({
           chatRequest: {
-            model: "openai/gpt-oss-120b:free", 
-            messages: cleanMessages, 
+            model: "openai/gpt-oss-120b:free",
+            messages: cleanMessages,
           },
         });
 
@@ -139,21 +139,21 @@ export const useChatStore = defineStore('chat', {
           localStorage.setItem("my_conversations", JSON.stringify(this.conversations));
 
           const exists = this.sidebarChats.some(item => item.id === convId);
-          
+
           if (!exists) {
             this.sidebarChats.push({
               id: convId,
               title: chatTitle
             });
-            
+
             localStorage.setItem("my_sidebar_chats", JSON.stringify(this.sidebarChats));
           }
 
           console.log("✅ تم حفظ المحادثة:", convId);
           console.log("📦 conversations keys:", Object.keys(this.conversations));
-          
+
           return convId;
-          
+
         } else {
           console.error("الرد عاد فارغاً من السيرفر.");
         }
@@ -168,15 +168,15 @@ export const useChatStore = defineStore('chat', {
     // دالة السايدبار عند الضغط على محادثة معينة — تحميل رسائلها من الـ localStorage
     selectConversation(conversationId: string) {
       console.log("🔍 selectConversation called with:", conversationId);
-      
+
       this.activeConversationId = conversationId;
-      
+
       if (this.conversations[conversationId] && this.conversations[conversationId].length > 0) {
         this.chats = [...this.conversations[conversationId]];
         console.log("✅ loaded from memory:", this.chats.length, "messages");
         return;
       }
-      
+
       // ثانياً: نقرأ من localStorage مباشرة
       const stored: ConversationsMap = JSON.parse(localStorage.getItem('my_conversations') || '{}');
       if (stored[conversationId] && stored[conversationId].length > 0) {
@@ -191,12 +191,13 @@ export const useChatStore = defineStore('chat', {
         const relatedMessages: ChatMessage[] = [];
         for (let i = 0; i < oldChats.length; i++) {
           const msg = oldChats[i];
-          if (msg.id === conversationId || 
-              (msg.role === 'user' && i + 1 < oldChats.length && oldChats[i + 1].id === conversationId)) {
+          if (msg.id === conversationId ||
+            (msg.role === 'user' && i + 1 < oldChats.length && oldChats[i + 1].id === conversationId)) {
             if (msg.role === 'user') {
               relatedMessages.push(msg);
               if (i + 1 < oldChats.length) relatedMessages.push(oldChats[i + 1]);
-            } else {if (i > 0 && oldChats[i - 1].role === 'user') {
+            } else {
+              if (i > 0 && oldChats[i - 1].role === 'user') {
                 relatedMessages.push(oldChats[i - 1]);
               }
               relatedMessages.push(msg);
@@ -236,8 +237,8 @@ export const useChatStore = defineStore('chat', {
         let skipNext = false;
         for (let i = 0; i < oldChats.length; i++) {
           const msg = oldChats[i];
-          if (msg.id === conversationId || 
-             (msg.role === 'user' && i + 1 < oldChats.length && oldChats[i + 1].id === conversationId)) {
+          if (msg.id === conversationId ||
+            (msg.role === 'user' && i + 1 < oldChats.length && oldChats[i + 1].id === conversationId)) {
             if (msg.role === 'user') skipNext = true;
             continue;
           }
