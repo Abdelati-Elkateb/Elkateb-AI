@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { useVoicePrompt } from '@/composables/useVoicePrompt'
 
+
+
+
+
 const {
+  
   showModal,
   isListening,
   result,

@@ -4,8 +4,11 @@ import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
 import path from 'path'
 
+
+
+
 export default defineConfig({
-  base: '/Elkateb-AI/',
+  base: './',
   plugins: [
     vue(),
     tailwindcss(),
@@ -16,7 +19,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  
+
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
