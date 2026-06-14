@@ -15,9 +15,6 @@
                     <div v-if="message.role === 'user'"
                         class="max-w-xs p-5 rounded-3xl bg-[#F9F9F9] text-[#333] rounded-br-none">
                         {{ message.content }}
-                                 <div class="test-red-900">
-                         {{ message.id }}
-                    </div>
                     </div>
            
                     
