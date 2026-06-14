@@ -7,6 +7,17 @@
       !isSidebarOpen ? '-translate-x-full md:translate-x-0' : 'translate-x-0 flex'
     ]">
 
+
+
+
+
+
+
+
+
+
+
+
     <div class="p-2 md:p-3 flex items-center" :class="isCollapsed ? 'justify-center' : 'justify-between'">
       <div class="p-2 hover:bg-black/5 rounded-lg cursor-pointer transition-colors shrink-0">
         <img :src="chatGPTIcon" alt="Logo" class="w-5 md:w-6 h-5 md:h-6 opacity-80" />
